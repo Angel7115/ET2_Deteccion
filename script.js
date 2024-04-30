@@ -37,68 +37,52 @@ document.addEventListener('DOMContentLoaded', function() {
           command: 'img/Foco_OFF.png',
           elementId: 'sala-luz-image'
         },
+        
         'enciende luces del jardín': {
           command: 'img/gardenlamp_ON.png',
-          elementId: 'jardin-luz-image'
-        },
-        'apaga luces del jardín': {
+          className: 'gardenlamp-image' // Clase específica para las gardenlamp
+      },
+      'apaga luces del jardín': {
           command: 'img/gardenlamp_OFF.png',
-          elementId: 'jardin-luz-image'
-        },
-        'abre las cortinas': {
+          className: 'gardenlamp-image' // Clase específica para las gardenlamp
+      },
+      'abre las cortinas': {
           command: 'img/CortinasOPEN.png',
-          elementId: 'cortinas-image'
-        },
-        'cierra las cortinas': {
+          className: 'cortinas-image' // Clase específica para las cortinas
+      },
+      'cierra las cortinas': {
           command: 'img/CortinasCLOSE.png',
-          elementId: 'cortinas-image'
-        },
-        'activa la alarma': {
-          command: 'activa la alarma',
-          elementId: 'alarma-image'
-        },
-        'apaga la alarma': {
-          command: 'apaga la alarma',
-          elementId: 'alarma-image'
-        },
-        'enciende las camaras': {
+          className: 'cortinas-image' // Clase específica para las cortinas
+      },
+      'enciende las cámaras': {
           command: 'img/Camaras_ON.png',
-          elementId: 'camaras-image'
-        },
-        'apaga las camaras': {
+          className: 'camaras-image' // Clase específica para las cámaras
+      },
+      'apaga las cámaras': {
           command: 'img/Camaras_OFF.png',
-          elementId: 'camaras-image'
-        }
-        // Agrega aquí los demás comandos y sus imágenes correspondientes
-      };
+          className: 'camaras-image' // Clase específica para las cámaras
+      }
+      // Agrega aquí los demás comandos y sus imágenes correspondientes
+  };
 
-      // Itera sobre las palabras clave para controlar dispositivos
-      for (const keyword in deviceKeywords) {
-        if (transcript.includes(keyword)) {
-          const { command, elementId } = deviceKeywords[keyword];
+  // Itera sobre las palabras clave para controlar dispositivos
+  for (const keyword in deviceKeywords) {
+      if (transcript.includes(keyword)) {
+          const { command, className } = deviceKeywords[keyword];
           console.log(`Se detectó la palabra clave: ${keyword}`);
           console.log(`Comando a ejecutar: ${command}`);
-          // Cambiar la imagen del elemento correspondiente
-          const element = document.getElementById(elementId);
-          if (element) {
-            if (elementId === 'alarma-image' && keyword.includes('activa')) {
-              // Reproducir el sonido de la alarma
-              const audio = new Audio('img/alarm.mp3');
-              audio.play();
-            } else if (elementId === 'alarma-image' && keyword.includes('apaga')) {
-              // Detener el sonido de la alarma
-              const audio = new Audio('img/alarm.mp3');
-              audio.pause();
-              audio.currentTime = 0;
-            } else {
-              // Cambiar la imagen del dispositivo
+
+          // Seleccionar y cambiar el estado de las imágenes específicas
+          const elements = document.getElementsByClassName(className);
+          for (let i = 0; i < elements.length; i++) {
+              const element = elements[i];
               element.src = command;
-            }
           }
+
           enviarOrdenA(mockApiUrl, keyword, command); // Llama a la función para enviar la orden a MockAPI.io
           return; // Sal del bucle una vez que se ha encontrado una coincidencia
-        }
       }
+  }
 
       // Mensaje para comandos no reconocidos
       console.log('Comando no reconocido');
