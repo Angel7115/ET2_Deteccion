@@ -1,5 +1,21 @@
 // Espera a que el DOM esté completamente cargado antes de ejecutar el código
 document.addEventListener('DOMContentLoaded', function() {
+
+// Obtener el valor del parámetro 'usuario' de la URL
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[[\]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+const usuario = getParameterByName('usuario');
+console.log('Usuario:', usuario);
+
+
   // Agrega un evento click al botón de voz
   document.getElementById('voice-btn').addEventListener('click', function() {
     // Inicializa el objeto de reconocimiento de voz
@@ -91,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           }
 
-          enviarOrdenA(mockApiUrl, keyword, command); // Llama a la función para enviar la orden a MockAPI.io
+          enviarOrdenA(mockApiUrl, keyword, command, usuario); // Llama a la función para enviar la orden a MockAPI.io
           return; // Sal del bucle una vez que se ha encontrado una coincidencia
         }
       }
@@ -125,11 +141,11 @@ function controlarAlarma(command) {
 }
 
 // Función para enviar la orden aceptada a MockAPI.io
-function enviarOrdenA(url, comando, imagen) {
+function enviarOrdenA(url, comando, imagen, usuario) {
   // Datos de la orden aceptada
   const orden = {
     orden: comando,
-    usuario: "Angel",
+    usuario: usuario,
     fecha: new Date().toLocaleDateString(),
     hora: new Date().toLocaleTimeString()
   };
